@@ -19,6 +19,8 @@ export class PagoClass {
 
   crearPago(req: any, resp: Response): void {
     const creador = new mongoose.Types.ObjectId(req.body.creador);
+    const foranea = new mongoose.Types.ObjectId(req.body.foranea);
+    const idEmpresa = req.body.foranea;
     const modalidad = new mongoose.Types.ObjectId(req.body.modalidad);
     const metodo = new mongoose.Types.ObjectId(req.body.metodo);
     const pedido = new mongoose.Types.ObjectId(req.body.pedido);
@@ -28,6 +30,7 @@ export class PagoClass {
 
     const nuevoPago = new PagosModel({
       creador,
+      foranea,
       modalidad,
       metodo,
       pedido,
@@ -44,6 +47,8 @@ export class PagoClass {
           err,
         });
       } else {
+        const server = Server.instance;
+        server.io.in(idEmpresa).emit("cargar-pagos", { ok: true });
         return resp.json({
           ok: true,
           pagoDB,
@@ -54,8 +59,9 @@ export class PagoClass {
 
   obtenerPagosPorPedido(req: any, resp: Response): void {
     const pedido = new mongoose.Types.ObjectId(req.get("pedido"));
+    const foranea = new mongoose.Types.ObjectId(req.get("foranea"));
 
-    PagosModel.find({ pedido })
+    PagosModel.find({ pedido, foranea })
       .populate("creador")
       .populate("modalidad")
       .populate("metodo")
@@ -76,18 +82,19 @@ export class PagoClass {
   }
 
   editarMotivo(req: any, resp: Response): void {
-    const pago = new mongoose.Types.ObjectId(req.body.pago);
+    const _id = new mongoose.Types.ObjectId(req.body.pago);
+    const foranea = new mongoose.Types.ObjectId(req.body.foranea);
+    const idEmpresa = req.body.foranea;
     const motivo: string = req.body.motivo;
     const estado: boolean = req.body.estado;
 
     const query = {
-      pago,
       motivo,
       estado,
     };
 
-    PagosModel.findByIdAndUpdate(
-      pago,
+    PagosModel.findOneAndUpdate(
+      { _id, foranea },
       query,
       { new: true },
       (err: any, pagoDB: any) => {
@@ -98,6 +105,8 @@ export class PagoClass {
             err,
           });
         } else {
+          const server = Server.instance;
+          server.io.in(idEmpresa).emit("cargar-pagos", { ok: true });
           return resp.json({
             ok: true,
             pagoDB,

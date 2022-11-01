@@ -8,4 +8,5 @@ export interface PagosInterface {
   metodo: string;
   monto: number;
   estado: boolean;
+  foranea: string;
 }

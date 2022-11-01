@@ -8,7 +8,6 @@ import { WorkerModelInterface } from "../interfaces/worker";
 const Schema = mongoose.Schema;
 
 const WorkerUserSchema = new Schema({
-  // idCreador: { type: mongoose.Types.ObjectId, ref: "userWorker" },
   nombre: { type: String, default: "Colaborador" },
   apellido: { type: String },
   identificacion: { type: String },
@@ -26,6 +25,8 @@ const WorkerUserSchema = new Schema({
   cantVisitas: { type: Number, default: 0 },
   estado: { type: Boolean, default: true },
   sucursal: { type: mongoose.Types.ObjectId, ref: "sucursales" },
+  foranea: { type: mongoose.Types.ObjectId, ref: "userWorker" },
+  empresa: { type: Boolean, default: false },
 });
 
 // validacion para único elemento

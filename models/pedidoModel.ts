@@ -19,6 +19,8 @@ const PedidoSchema = new Schema({
   etapa: { type: mongoose.Types.ObjectId, ref: "etapas" },
   color: { type: mongoose.Types.ObjectId, ref: "colores" },
   origen: { type: mongoose.Types.ObjectId, ref: "origenPedido" },
+  archivado: { type: Boolean, default: false },
+  foranea: { type: mongoose.Types.ObjectId, ref: "userWorker" },
 });
 
 // validacion para único elemento

@@ -16,6 +16,7 @@ const pagosSchema = new Schema({
   metodo: { type: Schema.Types.ObjectId, ref: "metodoPago" },
   monto: { type: Number, default: 0 },
   estado: { type: Boolean, default: true },
+  foranea: { type: Schema.Types.ObjectId, ref: "userWorker" },
 });
 
 // validacion para único elemento

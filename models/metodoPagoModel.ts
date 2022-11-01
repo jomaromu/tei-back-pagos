@@ -11,7 +11,8 @@ const metodoPagoSchema = new Schema({
 
     idCreador: { type: Schema.Types.ObjectId, ref: "userWorker" },
     nombre: { type: String, required: [true, 'EL nombre es necesario'], unique: true },
-    estado: { type: Boolean, default: true }
+    estado: { type: Boolean, default: true },
+    foranea: { type: Schema.Types.ObjectId, ref: "userWorker" },
 });
 
 // validacion para único elemento
